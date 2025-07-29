@@ -1,24 +1,24 @@
-const { DataTypes, DATE } = require('sequelize');
-const sequelize = require('../config/db');
-const Product = require('./product');
-
-const ProductVariant = sequelize.define('ProductVariant',{
+module.exports = (sequelize, DataTypes) => {
+  const ProductVariant = sequelize.define('ProductVariant', {
     variant_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true 
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
     product_id: DataTypes.INTEGER,
     color: DataTypes.STRING,
     size: DataTypes.STRING,
     price: DataTypes.DECIMAL,
     stock: DataTypes.INTEGER
-},{
-    tableName:'product_variants',
+  }, {
+    tableName: 'product_variants',
     timestamps: false
-});
+  });
 
-ProductVariant.belongsTo(Product, { foreignKey: 'product_id'} );
-Product.hasMany(ProductVariant, { foreignKey: 'product_id'} );
+  ProductVariant.associate = (models) => {
+    ProductVariant.belongsTo(models.Product, { foreignKey: 'product_id' });
+    models.Product.hasMany(ProductVariant, { foreignKey: 'product_id' });
+  };
 
-module.exports = ProductVariant;
+  return ProductVariant;
+};

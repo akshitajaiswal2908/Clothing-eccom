@@ -1,17 +1,30 @@
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
 const sequelize = require('../config/db');
-const User = require('./user');
-const Address = require('./address');
-const Category = require('./category');
-const Product = require('./product');
-const ProductVariant = require('./productVariant');
 
-User.hasMany(Address, { foreignKey: 'user_id' });
-Address.belongsTo(User, { foreignKey: 'user_id' });
+const db = {};
+const basename = path.basename(__filename);
 
-Product.belongsTo(Category, { foreignKey: 'category_id'} );
-Product.hasMany(ProductVariant, { foreignKey: 'product_id'} );
+fs.readdirSync(__dirname)
+  .filter(file =>
+    file !== basename &&
+    file.endsWith('.js')
+  )
+  .forEach(file => {
+    const modelFunc = require(path.join(__dirname, file));
+    const model = modelFunc(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
 
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
-const db = { sequelize, User, Address, Category, Product, ProductVariant };
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 module.exports = db;
+
