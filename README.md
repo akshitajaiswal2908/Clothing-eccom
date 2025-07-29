@@ -97,3 +97,16 @@ URL: DELETE /api/user/address/:address_id
 Headers:
 
 Authorization: Bearer your_jwt_token_here
+
+----
+
+Get all products
+URL:GET /api/products
+
+----
+
+Get product by ID
+URL:GET /api/product/:id	
+
+----
+

@@ -4,7 +4,7 @@ require('dotenv').config();
 const sequelize = new Sequelize(
   'ecommerce',       
   'root',             
-  'Anju@1976',                 
+  '12345677',                 
   {
     host: 'localhost', 
     dialect: 'mysql', 
