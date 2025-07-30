@@ -110,3 +110,39 @@ URL:GET /api/product/:id
 
 ----
 
+Add to Cart
+URL: POST /api/cart/add
+Headers:
+Authorization: Bearer your_jwt_token_here
+Body:
+{
+  "variant_id": 1,
+  "quantity": 2
+}
+
+----
+
+View Cart
+URL: GET /api/cart
+Headers:
+Authorization: Bearer your_jwt_token_here
+
+----
+
+Update Quantity
+URL: PUT /api/cart/:id
+Headers:
+Authorization: Bearer your_jwt_token_here
+Body:
+{
+  "quantity": 5
+}
+
+----
+
+Remove Item
+URL: DELETE /api/cart/:id
+Headers:
+Authorization: Bearer your_jwt_token_here
+
+----
