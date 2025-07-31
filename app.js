@@ -11,11 +11,11 @@ require('dotenv').config();
 
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);    
-app.use('/api/user', userRoutes); 
-app.use('/api/user', addressRoutes);    
-app.use('/api', productRoutes);
-app.use('/api/cart', cartRoutes);
+app.use('/auth', authRoutes);    
+app.use('/user', userRoutes); 
+app.use('/address', addressRoutes);    
+app.use('/products', productRoutes);
+app.use('/cart', cartRoutes);
 
 
 db.sequelize.sync().then(() => {
