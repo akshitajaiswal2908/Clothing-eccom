@@ -20,8 +20,6 @@ exports.viewCart = async (req, res) => {
 
         res.json({ cartItems: cart.CartItems });
     }catch(err){
-        console.error("View cart error:", err);
-
      res.status(500).json({ message: 'Error viewing cart' });
     }
 };
