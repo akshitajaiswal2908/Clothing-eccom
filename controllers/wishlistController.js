@@ -17,8 +17,17 @@ exports.viewWishlist = async ( req , res ) => {
         if(!wishlist){
             return res.json({ wishlistItems: [] });
         }
+        const formattedItems = wishlist.WishlistItems.map(item => ({
+            wishlist_item_id: item.wishlist_item_id,
+            wishlist_id: item.wishlist_id,
+            variant_id: item.variant_id,
+            color: item.ProductVariant?.color,
+            size: item.ProductVariant?.size,
+            price: item.ProductVariant?.price,
+            stock: item.ProductVariant?.stock
+        }));
 
-        res.json({ wishlistItems : wishlist.WishlistItems });
+        res.json({ wishlistItems: formattedItems });
     }
     catch(err){
      res.status(500).json({ message: 'Error viewing wishlist' });

@@ -1,28 +1,43 @@
 const { Cart, CartItem, ProductVariant } = require('../models');
 
-
 exports.viewCart = async (req, res) => {
     const userId = req.user.id;
-    try{
+
+    try {
         const cart = await Cart.findOne({
-            where: {
-                user_id: userId
-            },
+            where: { user_id: userId },
             include: {
-                model : CartItem,
-                include: {model : ProductVariant },
-            },
+                model: CartItem,
+                attributes: ['cart_item_id', 'quantity', 'cart_id', 'variant_id'],
+                include: {
+                    model: ProductVariant,
+                    attributes: ['variant_id', 'color', 'size', 'price', 'stock']
+                }
+            }
         });
 
-        if(!cart){
+        if (!cart) {
             return res.json({ cartItems: [] });
         }
 
-        res.json({ cartItems: cart.CartItems });
-    }catch(err){
-     res.status(500).json({ message: 'Error viewing cart' });
+        const formattedItems = cart.CartItems.map(item => ({
+            cart_item_id: item.cart_item_id,
+            quantity: item.quantity,
+            cart_id: item.cart_id,
+            variant_id: item.variant_id,
+            color: item.ProductVariant.color,
+            size: item.ProductVariant.size,
+            price: item.ProductVariant.price,
+            stock: item.ProductVariant.stock
+        }));
+
+        res.json({ cartItems: formattedItems });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error viewing cart' });
     }
 };
+
 
 exports.addToCart = async (req, res) => {
     const userId = req.user.id;
@@ -51,6 +66,7 @@ exports.addToCart = async (req, res) => {
         }
     res.json({ message: 'Item added to cart' });
     }catch(err){
+        console.log(err);
     res.status(500).json({ message: 'Error adding to cart' });
     }
 };
