@@ -3,7 +3,7 @@
 API Endpoints
 ----
 User Signup
-URL: POST /api/auth/signup
+URL: POST /auth/signup
 Request Body:
 
 json
@@ -15,7 +15,7 @@ json
 
 ----
 User Login
-URL: POST /api/auth/login
+URL: POST /auth/login
 Request Body:
 
 json
@@ -26,7 +26,7 @@ json
 
 ----
 Get User 
-URL: GET /api/user/profile
+URL: GET /user/profile
 Headers:
 
 Key:    Authorization
@@ -35,7 +35,7 @@ Value:  Bearer your_jwt_token_here
 ----
 Edit User Profile
 
-URL: PUT /api/user/profile
+URL: PUT /user/profile
 Headers:
 
 Key:    Authorization  
@@ -52,7 +52,7 @@ json
 ----
 
 Add Address
-URL: POST /api/user/address
+URL: POST /address
 Headers:
 
 Authorization: Bearer your_jwt_token_here
@@ -69,7 +69,7 @@ json
 ----
 
 Get Addresses
-URL: GET /api/user/address
+URL: GET /address
 Headers:
 
 Authorization: Bearer your_jwt_token_here
@@ -77,7 +77,7 @@ Authorization: Bearer your_jwt_token_here
 ----
 
 Update Address
-URL: PUT /api/user/address/:address_id
+URL: PUT /address/:address_id
 Headers:
 
 Authorization: Bearer your_jwt_token_here
@@ -93,7 +93,7 @@ json
 
 ----
 Delete Address
-URL: DELETE /api/user/address/:address_id
+URL: DELETE /address/:address_id
 Headers:
 
 Authorization: Bearer your_jwt_token_here
@@ -101,17 +101,17 @@ Authorization: Bearer your_jwt_token_here
 ----
 
 Get all products
-URL:GET /api/products
+URL:GET /products
 
 ----
 
 Get product by ID
-URL:GET /api/product/:id	
+URL:GET /products/:product_id	
 
 ----
 
 Add to Cart
-URL: POST /api/cart/add
+URL: POST /cart/add
 Headers:
 Authorization: Bearer your_jwt_token_here
 Body:
@@ -123,14 +123,14 @@ Body:
 ----
 
 View Cart
-URL: GET /api/cart
+URL: GET /cart
 Headers:
 Authorization: Bearer your_jwt_token_here
 
 ----
 
 Update Quantity
-URL: PUT /api/cart/:id
+URL: PUT /cart/:cart_id
 Headers:
 Authorization: Bearer your_jwt_token_here
 Body:
@@ -141,7 +141,7 @@ Body:
 ----
 
 Remove Item
-URL: DELETE /api/cart/:id
+URL: DELETE /cart/:cart_id
 Headers:
 Authorization: Bearer your_jwt_token_here
 
