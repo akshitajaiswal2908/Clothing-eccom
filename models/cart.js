@@ -10,6 +10,7 @@ const Cart = sequelize.define('Cart' , {
       allowNull: false,
     },
     },{
+    tableName: 'cart',
     timestamps: false
     });
     Cart.associate = models => {

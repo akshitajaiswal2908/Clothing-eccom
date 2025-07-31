@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     state: DataTypes.STRING,
     zip: DataTypes.STRING
   }, {
-    tableName: 'addresses',
+    tableName: 'address',
     timestamps: false
   });
 

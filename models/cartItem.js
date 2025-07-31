@@ -9,7 +9,9 @@ module.exports = (sequelize , DataTypes) => {
             type: DataTypes.INTEGER,
             defaultValue: 1,
     },
-    });
+    },{
+        tableName: 'cart_items',
+        timestamps: false});
 
     CartItem.associate = models => {
     CartItem.belongsTo(models.Cart, { foreignKey: 'cart_id' });
