@@ -1,4 +1,30 @@
-const { Cart, CartItem, ProductVariant, User } = require('../models');
+const { Cart, CartItem, ProductVariant } = require('../models');
+
+
+exports.viewCart = async (req, res) => {
+    const userId = req.user.id;
+    try{
+        const cart = await Cart.findOne({
+            where: {
+                user_id: userId
+            },
+            include: {
+                model : CartItem,
+                include: {model : ProductVariant },
+            },
+        });
+
+        if(!cart){
+            return res.json({ cartItems: [] });
+        }
+
+        res.json({ cartItems: cart.CartItems });
+    }catch(err){
+        console.error("View cart error:", err);
+
+     res.status(500).json({ message: 'Error viewing cart' });
+    }
+};
 
 exports.addToCart = async (req, res) => {
     const userId = req.user.id;
@@ -28,31 +54,6 @@ exports.addToCart = async (req, res) => {
     res.json({ message: 'Item added to cart' });
     }catch(err){
     res.status(500).json({ message: 'Error adding to cart' });
-    }
-};
-
-exports.viewCart = async (req, res) => {
-    const userId = req.user.id;
-    try{
-        const cart = await Cart.findOne({
-            where: {
-                user_id: userId
-            },
-            include: {
-                model : CartItem,
-                include: {model : ProductVariant },
-            },
-        });
-
-        if(!cart){
-            return res.json({ cartItems: [] });
-        }
-
-        res.json({ cartItems: cart.CartItems });
-    }catch(err){
-        console.error("View cart error:", err);
-
-     res.status(500).json({ message: 'Error viewing cart' });
     }
 };
 

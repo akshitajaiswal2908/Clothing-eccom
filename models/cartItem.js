@@ -8,7 +8,15 @@ module.exports = (sequelize , DataTypes) => {
         quantity: {
             type: DataTypes.INTEGER,
             defaultValue: 1,
-    },
+        },
+        cart_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        variant_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        }
     },{
         tableName: 'cart_items',
         timestamps: false});
