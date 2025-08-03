@@ -17,21 +17,30 @@ exports.viewCart = async (req, res) => {
         });
 
         if (!cart) {
-            return res.json({ cartItems: [] });
+            return res.json({ cartItems: [], totalValue: 0 });
         }
 
-        const formattedItems = cart.CartItems.map(item => ({
-            cart_item_id: item.cart_item_id,
-            quantity: item.quantity,
-            cart_id: item.cart_id,
-            variant_id: item.variant_id,
-            color: item.ProductVariant.color,
-            size: item.ProductVariant.size,
-            price: item.ProductVariant.price,
-            stock: item.ProductVariant.stock
-        }));
+        let totalValue = 0;
 
-        res.json({ cartItems: formattedItems });
+        const formattedItems = cart.CartItems.map(item => {
+            const itemTotal = item.quantity * item.ProductVariant.price;
+            totalValue += itemTotal;
+
+            return {
+                cart_item_id: item.cart_item_id,
+                quantity: item.quantity,
+                cart_id: item.cart_id,
+                variant_id: item.variant_id,
+                color: item.ProductVariant.color,
+                size: item.ProductVariant.size,
+                price: item.ProductVariant.price,
+                stock: item.ProductVariant.stock,
+                itemTotal: itemTotal
+            };
+        });
+
+
+        res.json({ cartItems: formattedItems, totalValue });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Error viewing cart' });

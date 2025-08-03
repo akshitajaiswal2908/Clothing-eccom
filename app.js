@@ -7,6 +7,7 @@ const addressRoutes = require('./routes/addressRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 require('dotenv').config();
 
@@ -18,6 +19,7 @@ app.use('/address', addressRoutes);
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
 app.use('/wishlist', wishlistRoutes);
+app.use('/orders', orderRoutes);
 
 db.sequelize.sync().then(() => {
   app.listen(3000, () => console.log('Server running on http://localhost:3000'));
