@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     color: DataTypes.STRING,
     size: DataTypes.STRING,
     price: DataTypes.DECIMAL,
-    stock: DataTypes.INTEGER
+    stock: DataTypes.INTEGER,
+    image_url: DataTypes.STRING
   }, {
     tableName: 'product_variants',
     timestamps: false

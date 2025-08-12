@@ -11,6 +11,11 @@ const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 
 
+//admin 
+const adminAuthRoutes = require('./routes/admin/adminAuthRoutes');
+const adminProductRoutes = require('./routes/admin/adminProductRoutes');
+
+
 require('dotenv').config();
 
 app.use(express.json());
@@ -24,6 +29,13 @@ app.use('/wishlist', wishlistRoutes);
 app.use('/orders', orderRoutes);
 app.use('/reviews', reviewRoutes);  
 
+
+//admin
+app.use('/admin/auth', adminAuthRoutes);
+app.use('/admin/products',adminProductRoutes );
+
+
+
 db.sequelize.sync().then(() => {
-  app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+  app.listen(3000, () => console.log('Server running on http://localhost:3000  and https://c1189a9cc144.ngrok-free.app/'));
 });
