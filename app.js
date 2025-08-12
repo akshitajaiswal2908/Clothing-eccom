@@ -9,6 +9,8 @@ const cartRoutes = require('./routes/cartRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+
 
 
 //admin 
@@ -28,6 +30,8 @@ app.use('/cart', cartRoutes);
 app.use('/wishlist', wishlistRoutes);
 app.use('/orders', orderRoutes);
 app.use('/reviews', reviewRoutes);  
+app.use('/payments', paymentRoutes);
+
 
 
 //admin
