@@ -1,6 +1,5 @@
 const { ProductVariant, Product } = require('../models');
 
-// GET /admin/products/:productId/variants
 exports.getVariantsByProduct = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -14,7 +13,6 @@ exports.getVariantsByProduct = async (req, res) => {
   }
 };
 
-// POST /admin/products/:productId/variants
 exports.createVariant = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -50,7 +48,6 @@ exports.createVariant = async (req, res) => {
   }
 };
 
-// PUT /admin/products/:productId/variants/:variantId
 exports.updateVariant = async (req, res) => {
   try {
     const { variantId } = req.params;
@@ -69,7 +66,6 @@ exports.updateVariant = async (req, res) => {
   }
 };
 
-// DELETE /admin/products/:productId/variants/:variantId
 exports.deleteVariant = async (req, res) => {
   try {
     const { variantId } = req.params;

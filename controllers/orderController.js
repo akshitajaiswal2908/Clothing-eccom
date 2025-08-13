@@ -1,3 +1,4 @@
+const razorpay = require('../utils/razorpay');
 const { Order, OrderItem, ProductVariant, Address, Cart, CartItem } = require('../models');
 
 // Place Order from Cart
@@ -16,17 +17,28 @@ exports.placeOrder = async (req, res) => {
 
     if (!cartItems.length) return res.status(400).json({ message: 'Cart is empty.' });
 
-    // Calculate total price
     let total_amount = 0;
     cartItems.forEach(item => {
       total_amount += item.quantity * item.ProductVariant.price;
     });
+  
+    // Razorpay Integration
+    const options = {
+      amount: total_amount * 100,  // amount in paise(razor only accepts paise
+      currency: "INR",
+      receipt: `receipt_order_${Date.now()}`,
+      payment_capture: 1 // auto capture payment
+    };
+
+    const razorpayOrder = await razorpay.orders.create(options);
+    /////////////
 
     const order = await Order.create({
       user_id,
       address_id,
       total_amount,
-      status: 'Placed'
+      razorpay_order_id: razorpayOrder.id,    
+      status: 'Pending'
     });
 
     for (const item of cartItems) {
@@ -38,17 +50,18 @@ exports.placeOrder = async (req, res) => {
       });
     }
 
-    await CartItem.destroy({ where: { cart_id: cart.cart_id } });
+    // await CartItem.destroy({ where: { cart_id: cart.cart_id } });
 
-    return res.status(201).json({
-      message: 'Order placed.',
+      return res.status(201).json({
+      message: 'Order created, please complete payment',
       order_id: order.order_id,
-      total_price: order.total_amount
+      razorpay_order: razorpayOrder
     });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Server error.' });
   }
+
 };
 
 // View All Orders of User

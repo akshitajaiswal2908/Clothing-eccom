@@ -6,16 +6,16 @@ const variantController = require('../../controllers/variantController');
 
 router.use(authMiddleware, adminMiddleware);
 
-// GET all variants for a product
+// GET all variants 
 router.get('/', variantController.getVariantsByProduct);
 
-// POST create new variant for a product
+// POST  variant for a product
 router.post('/', variantController.createVariant);
 
-// PUT update a specific variant
+// PUT  variant
 router.put('/:variantId', variantController.updateVariant);
 
-// DELETE a specific variant
+// DELETE variant
 router.delete('/:variantId', variantController.deleteVariant);
 
 module.exports = router;
