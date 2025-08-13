@@ -26,8 +26,11 @@
     "google-auth-library": "^10.2.1",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.2",
+<<<<<<< HEAD
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+=======
+>>>>>>> 8023ed5de80fde3edddffa51fe68dd5bd5dd4164
     "razorpay": "^2.9.6",
     "sequelize": "^6.37.7"
   }
