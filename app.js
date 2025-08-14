@@ -13,10 +13,6 @@ const wishlistRoutes = require('./routes/wishlistRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
-<<<<<<< HEAD
-=======
-
->>>>>>> 8023ed5de80fde3edddffa51fe68dd5bd5dd4164
 
 // Admin routes
 const adminAuthRoutes = require('./routes/admin/adminAuthRoutes');
@@ -46,11 +42,6 @@ app.use('/wishlist', wishlistRoutes);
 app.use('/orders', orderRoutes);
 app.use('/reviews', reviewRoutes);  
 app.use('/payments', paymentRoutes);
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 8023ed5de80fde3edddffa51fe68dd5bd5dd4164
 
 //admin
 app.use('/admin/auth', adminAuthRoutes);
