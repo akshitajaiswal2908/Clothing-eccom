@@ -27,7 +27,7 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
     dialectOptions: {
       ssl: {
-        ca: fs.readFileSync(ca)
+        ca: ca
       }
     },
     logging: false
