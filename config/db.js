@@ -4,7 +4,7 @@ require('dotenv').config();
 
 let sslOption = {};
 if (process.env.DB_SSL_CA) {
-  sslOption = { ssl: { ca: fs.readFileSync(process.env.DB_SSL_CA) } };
+  sslOption = { ssl: {rejectUnauthorized: false }};
 }
 
 
