@@ -2,6 +2,12 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 require('dotenv').config();
 
+let sslOption = {};
+if (process.env.DB_SSL_CA) {
+  sslOption = { ssl: { ca: fs.readFileSync(process.env.DB_SSL_CA) } };
+}
+
+
 const sequelize = new Sequelize(
   // 'ecommerce',       
   // 'root',             
