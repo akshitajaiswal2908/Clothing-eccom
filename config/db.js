@@ -2,10 +2,9 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 require('dotenv').config();
 
-let sslOption = {};
-if (process.env.DB_SSL_CA) {
-  sslOption = { ssl: { ca: fs.readFileSync(process.env.DB_SSL_CA) } };
-}
+const caPath = path.join(__dirname, '../ca.pem'); // adjust path according to your folder structure
+const ca = fs.readFileSync(caPath);
+
 
 
 const sequelize = new Sequelize(
@@ -26,7 +25,7 @@ const sequelize = new Sequelize(
     dialect: 'mysql',
     dialectOptions: {
       ssl: {
-        ca: fs.readFileSync(process.env.DB_SSL_CA)
+        ca: fs.readFileSync(ca)
       }
     },
     logging: false
