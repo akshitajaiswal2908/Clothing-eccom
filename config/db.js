@@ -1,5 +1,7 @@
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
+const path = require('path');
+
 require('dotenv').config();
 
 const caPath = path.join(__dirname, '../ca.pem'); // adjust path according to your folder structure
