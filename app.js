@@ -48,6 +48,8 @@ app.use('/payments', paymentRoutes);
 app.use('/admin/auth', adminAuthRoutes);
 app.use('/admin/products', adminProductRoutes);
 
+
+app.use(express.static('public'));
 app.get('/delete-data.html', (req, res) => {
   res.send(`
     <h1>User Data Deletion</h1>
