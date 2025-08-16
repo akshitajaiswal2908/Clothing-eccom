@@ -49,11 +49,11 @@ app.use('/admin/products', adminProductRoutes);
 
 
 db.sequelize.sync().then(() => {
-  app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
-    console.log('Ngrok URL: https://c1189a9cc144.ngrok-free.app/');
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
 }).catch(err => {
   console.error('Database sync failed:', err);
 });
+
  
