@@ -23,4 +23,4 @@ router.get(
 //   facebookSuccess
 // );
 
-// module.exports = router;
+module.exports = router;
