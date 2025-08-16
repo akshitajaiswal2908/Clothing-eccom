@@ -48,6 +48,14 @@ app.use('/payments', paymentRoutes);
 app.use('/admin/auth', adminAuthRoutes);
 app.use('/admin/products', adminProductRoutes);
 
+app.get('/delete-data.html', (req, res) => {
+  res.send(`
+    <h1>User Data Deletion</h1>
+    <p>If you want your Facebook login data to be deleted from our servers, please send an email to <strong>akshitajaiswal2908@gmail.com</strong> with your name and registered email.</p>
+  `);
+});
+
+
 
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => {
