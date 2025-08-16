@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { signup, login, googleSuccess ,facebookSuccess} = require('../controllers/authController');
+const { signup, login, googleSuccess } = require('../controllers/authController');
 
 
 router.post('/signup', signup);
