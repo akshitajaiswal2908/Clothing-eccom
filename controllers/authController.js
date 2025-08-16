@@ -49,15 +49,15 @@ exports.googleSuccess = (req, res) => {
 };
 
 // Facebook login successful
-exports.facebookSuccess = (req, res) => {
-  if (!req.user) return res.status(401).json({ message: 'Facebook authentication failed' });
+// exports.facebookSuccess = (req, res) => {
+//   if (!req.user) return res.status(401).json({ message: 'Facebook authentication failed' });
 
-  const user = req.user;
-  const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+//   const user = req.user;
+//   const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-  res.json({
-    message: 'Facebook login successful',
-    token,
-    user: { id: user.user_id, name: user.name, email: user.email }
-  });
-};
+//   res.json({
+//     message: 'Facebook login successful',
+//     token,
+//     user: { id: user.user_id, name: user.name, email: user.email }
+//   });
+// };

@@ -16,11 +16,11 @@ router.get(
 );
 
 
-// Facebook
-router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
-router.get('/facebook/callback',
-  passport.authenticate('facebook', { session: false, failureRedirect: '/' }),
-  facebookSuccess
-);
+// // Facebook
+// router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
+// router.get('/facebook/callback',
+//   passport.authenticate('facebook', { session: false, failureRedirect: '/' }),
+//   facebookSuccess
+// );
 
-module.exports = router;
+// module.exports = router;
