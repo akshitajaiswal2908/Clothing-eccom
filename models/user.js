@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     allowNull: false,
     defaultValue: 'user'
     },
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    isVerified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
   }, {
     tableName: 'users',
     timestamps: false

@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    razorpay_order_id: {
+      type: DataTypes.STRING
+    },
     order_date: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW

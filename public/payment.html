@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pay for Order</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+  <h2>Pay for Your Order</h2>
+  <label for="order-id">Order ID:</label>
+  <input type="number" id="order-id" value="1" />
+  <button id="pay-btn">Pay Now</button>
+
+  <h3>Payment Details:</h3>
+  <p>Razorpay Order ID: <span id="razorpay-order-id">-</span></p>
+  <p>Razorpay Payment ID: <span id="razorpay-payment-id">-</span></p>
+  <p>Razorpay Signature: <span id="razorpay-signature">-</span></p>
+
+  <script>
+    document.getElementById('pay-btn').onclick = async function() {
+      const orderId = document.getElementById('order-id').value.trim();
+      if(!orderId) {
+        alert("Please enter a valid Order ID");
+        return;
+      }
+
+      try {
+        // Call backend initiate-payment API
+        const res = await fetch('http://localhost:3000/payments/initiate-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: orderId })
+        });
+
+        const data = await res.json();
+
+        if(data.status !== 'created') {
+          alert('Error initiating payment: ' + (data.message || 'Unknown error'));
+          return;
+        }
+
+        // Open Razorpay checkout
+        const options = {
+          key: data.key_id,
+          amount: data.razorpay_order.amount,
+          currency: data.razorpay_order.currency,
+          name: "Your Store",
+          description: `Payment for Order ${data.order_id}`,
+          order_id: data.razorpay_order.id,
+          handler: async function(response) {
+            // Show the three values on the page
+            document.getElementById('razorpay-order-id').textContent = response.razorpay_order_id;
+            document.getElementById('razorpay-payment-id').textContent = response.razorpay_payment_id;
+            document.getElementById('razorpay-signature').textContent = response.razorpay_signature;
+
+            try {
+              // Verify payment
+              const verifyRes = await fetch('http://localhost:3000/payments/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(response)
+              });
+
+              const verifyData = await verifyRes.json();
+              alert("Payment Status: " + verifyData.status + "\nMessage: " + verifyData.message);
+            } catch(err) {
+              console.error(err);
+              alert("Error verifying payment.");
+            }
+          },
+          prefill: {
+            name: "Test User",
+            email: "test@example.com",
+            contact: "9999999999"
+          },
+          theme: { color: "#3399cc" }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch(err) {
+        console.error(err);
+        alert("Error initiating payment. Check console for details.");
+      }
+    }
+  </script>
+</body>
+</html>

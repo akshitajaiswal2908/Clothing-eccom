@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { signup, login, googleSuccess,facebookSuccess } = require('../controllers/authController');
-
+const { signup, login, googleSuccess, facebookSuccess, verifyEmail ,forgotPassword, resetPassword} = require('../controllers/authController');
 
 router.post('/signup', signup);
 router.post('/login', login);
+router.get('/verify/:token', verifyEmail);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password/:token', resetPassword);
 
-//Google
+// Google login
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get(
   '/google/callback',
@@ -15,10 +17,10 @@ router.get(
   googleSuccess
 );
 
-
-// Facebook
+// Facebook login
 router.get('/facebook', passport.authenticate('facebook', { scope: ['email'] }));
-router.get('/facebook/callback',
+router.get(
+  '/facebook/callback',
   passport.authenticate('facebook', { session: false, failureRedirect: '/' }),
   facebookSuccess
 );
