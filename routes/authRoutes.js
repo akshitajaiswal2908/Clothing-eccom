@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { signup, login, googleSuccess, facebookSuccess, verifyEmail ,forgotPassword, resetPassword} = require('../controllers/authController');
+const { signup,  googleSuccess, facebookSuccess, verifyEmail ,forgotPassword, resetPassword , sendOTP , verifyOTP} = require('../controllers/authController');
 
 router.post('/signup', signup);
-router.post('/login', login);
 router.get('/verify/:token', verifyEmail);
+// router.post('/login', login);
+router.post('/send-otp', sendOTP);
+router.post('/verify-otp', verifyOTP);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
 

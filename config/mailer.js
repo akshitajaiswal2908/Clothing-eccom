@@ -19,6 +19,14 @@ const sendVerificationEmail = async (userEmail, token) => {
   });
 };
 
+const sendOTPEmail = (userEmail, otp) => {
+  return transporter.sendMail({
+    to: userEmail,
+    subject: 'Your Login OTP',
+    text: `Your OTP is ${otp}. It expires in 5 minutes.`
+  });
+};
+
 const sendResetPasswordEmail = async (userEmail, token) => {
   const url = `${process.env.BASE_URL}/auth/reset-password/${encodeURIComponent(token)}`;
   await transporter.sendMail({
@@ -30,4 +38,4 @@ const sendResetPasswordEmail = async (userEmail, token) => {
 
 
 
-module.exports = { sendVerificationEmail ,sendResetPasswordEmail};
+module.exports = { sendVerificationEmail ,sendResetPasswordEmail , sendOTPEmail};

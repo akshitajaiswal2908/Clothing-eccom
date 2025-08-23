@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
-const { sendVerificationEmai , sendResetPasswordEmail } = require('../config/mailer');
+const otpGenerator = require('otp-generator');
+const { User , OTP } = require('../models');
+const { sendVerificationEmail , sendResetPasswordEmail ,sendOTPEmail} = require('../config/mailer');
 require('dotenv').config();
 
 exports.signup = async (req, res) => {
@@ -47,20 +48,62 @@ exports.verifyEmail = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
+// exports.login = async (req, res) => {
+//   const { email, password } = req.body;
+//   try {
+//     const user = await User.findOne({ where: { email } });
+//     if (!user) return res.status(404).json({ message: 'User not found' });
+
+//     const valid = await bcrypt.compare(password, user.password);
+//     if (!valid) return res.status(401).json({ message: 'Wrong password' });
+//     if (!user.isVerified) return res.status(401).json({ message: 'Please verify your email first' });
+
+//     const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+//     res.json({ message: 'Login successful', token });
+//   } catch (err) {
+//     res.status(500).json({ message: 'Error during login', error: err.message });
+//   }
+// };
+
+exports.sendOTP = async (req, res) => {
   try {
+    const { email } = req.body;
+
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ message: 'Wrong password' });
-    if (!user.isVerified) return res.status(401).json({ message: 'Please verify your email first' });
+    // const isPasswordValid = await bcrypt.compare(password, user.password);
+    // if (!isPasswordValid) return res.status(401).json({ message: 'Invalid password' });
 
-    const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const otp = otpGenerator.generate(6, { digits: true, upperCaseAlphabets: false, specialChars: false });
+
+    await OTP.create({
+      email,
+      otp,
+      expiresAt: new Date(Date.now() + 5 * 60 * 1000) // expires in 5 min
+    });
+
+    await sendOTPEmail(email, otp);
+    res.json({ message: 'OTP sent to your email' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error sending OTP', error: err.message });
+  }
+};
+
+exports.verifyOTP = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    const otpEntry = await OTP.findOne({ where: { email, otp } });
+    if (!otpEntry) return res.status(400).json({ message: 'Invalid OTP' });
+    if (otpEntry.expiresAt < new Date()) return res.status(400).json({ message: 'OTP expired' });
+
+    const token = jwt.sign({ id: email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    await OTP.destroy({ where: { email } }); // delete OTP after use
     res.json({ message: 'Login successful', token });
   } catch (err) {
-    res.status(500).json({ message: 'Error during login', error: err.message });
+    res.status(500).json({ message: 'Error verifying OTP', error: err.message });
   }
 };
 
