@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const otpGenerator = require('otp-generator');
-const { User , OTP } = require('../models');
+const { User } = require('../models');
+const redisClient = require('../config/redis');
+
 const { sendVerificationEmail , sendResetPasswordEmail ,sendOTPEmail} = require('../config/mailer');
 require('dotenv').config();
 
@@ -72,16 +74,9 @@ exports.sendOTP = async (req, res) => {
     const user = await User.findOne({ where: { email } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-    // if (!isPasswordValid) return res.status(401).json({ message: 'Invalid password' });
-
     const otp = otpGenerator.generate(6, { digits: true, upperCaseAlphabets: false, specialChars: false });
 
-    await OTP.create({
-      email,
-      otp,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000) // expires in 5 min
-    });
+    await redisClient.setEx(`otp:${email}`, 300, otp);
 
     await sendOTPEmail(email, otp);
     res.json({ message: 'OTP sent to your email' });
@@ -94,18 +89,28 @@ exports.verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
-    const otpEntry = await OTP.findOne({ where: { email, otp } });
-    if (!otpEntry) return res.status(400).json({ message: 'Invalid OTP' });
-    if (otpEntry.expiresAt < new Date()) return res.status(400).json({ message: 'OTP expired' });
+    const storedOtp = await redisClient.get(`otp:${email}`);
+    if (!storedOtp) return res.status(400).json({ message: 'OTP expired or not found' });
+    if (storedOtp !== otp) return res.status(400).json({ message: 'Invalid OTP' });
 
-    const token = jwt.sign({ id: email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    await OTP.destroy({ where: { email } }); // delete OTP after use
+    const token = jwt.sign(
+      { id: user.user_id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    await redisClient.del(`otp:${email}`);
+
     res.json({ message: 'Login successful', token });
   } catch (err) {
     res.status(500).json({ message: 'Error verifying OTP', error: err.message });
   }
 };
+
+
 
 exports.googleSuccess = (req, res) => {
   if (!req.user) return res.status(401).json({ message: 'Google authentication failed' });
