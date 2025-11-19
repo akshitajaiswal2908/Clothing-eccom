@@ -9,3 +9,6 @@ https://console.aiven.io/account/a553fe033dcc/project/akshitajaiswal2908-61db/se
 mysql -h ecommerce-akshitajaiswal2908-61db.c.aivencloud.com -P 13912 -u avnadmin -p --ssl-mode=REQUIRED defaultdb
 
 http://localhost:3000/payment.html
+
+
+Done
