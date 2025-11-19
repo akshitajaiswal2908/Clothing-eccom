@@ -10,5 +10,3 @@ mysql -h ecommerce-akshitajaiswal2908-61db.c.aivencloud.com -P 13912 -u avnadmin
 
 http://localhost:3000/payment.html
 
-
-Done
